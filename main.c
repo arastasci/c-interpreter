@@ -3,9 +3,9 @@
 int main(){
     //printf("Hello, world!\n");
     while(1){
-        char* initialInput[256];
+        char initialInput[256];
         scanf("%s", initialInput);
-        char* input[256];
+        char input[256];
         int j = 0;
         // get rid of whitespaces
         for(int i = 0; i < 256; i++){
@@ -20,8 +20,8 @@ int main(){
         
 
         // produce output
-        
-        
+
+        printf("%s", input);
 
 
     }
