@@ -7,13 +7,7 @@ int main(){
         scanf("%s", initialInput);
         char input[256];
         int j = 0;
-        // get rid of whitespaces
-        for(int i = 0; i < 256; i++){
-            if(initialInput[i] != ' '){
-                input[j] = initialInput[i];
-                j++;
-            }
-        }
+        // yasini siktim
         // null terminator must be j?
 
         // parse input
