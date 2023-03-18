@@ -9,7 +9,6 @@ int main(){
         int j = 0;
         // yasini siktim
         // null terminator must be j?
-
         // parse input
         
 
