@@ -1,20 +1,11 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include "token.h"
 int main(){
-    //printf("Hello, world!\n");
-    while(1){
-        char initialInput[256];
-        scanf("%s", initialInput);
-        char input[256];
-        int j = 0;
-        // yasini siktim
-        // null terminator must be j?
-        // parse input
-        
-
-        // produce output
-
-        printf("%s", input);
+    char input [257];
+    while(fgets(input, 257, stdin) != NULL){
+        tokenize(input);
+        printTokens();
 
 
     }

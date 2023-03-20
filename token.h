@@ -1,3 +1,5 @@
+#ifndef TOKEN 
+#define TOKEN
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,27 +7,31 @@
 
 #define MAX_TOKEN_LENGTH 256
 
-typedef enum {
-    TOK_OP_PLUS,  // '+'
-    TOK_OP_MINUS, // '-'
-    TOK_OP_MUL,   // '*'
-    TOK_OP_AND,   // '&'
-    TOK_OP_OR,    // '|'
-    
-    TOK_STROP_XOR,   // 'xor'
-    TOK_STROP_LS,    // 'ls'
-    TOK_STROP_RS,    // 'rs'
-    TOK_STROP_LR,    // 'lr'
-    TOK_STROP_RR,    // 'rr'
-    TOK_STROP_NOT,   // 'not'
-
-    TOK_COMMMENT, // 'comment'
-    TOK_LPAREN,   // '('
-    TOK_RPAREN,   // ')'
-
-    TOK_ASSIGN,   // '='
-    TOK_IDENTIFIER, // variable name
-    TOK_CONSTANT, // constant value
-    
-    TOK_ERROR     // invalid token
+typedef enum e_token_type {
+    OPERATOR,   // +, -, *, /
+    LEFT_PAREN, // (
+    RIGHT_PAREN, // )
+    STR_OPERATOR_UNARY, //  'not'
+    STR_OPERATOR_BINARY, // 'ls', 'rs', 'lr', 'rr', 'xor'
+    IDENTIFIER, // a, b, c, ...
+    ASSIGNMENT, // =
+    INTEGER,   // 1, 2, 3, ...
+    COMMENT,  // % ...
+    ERROR     // invalid token
 } token_type;
+
+typedef struct s_token
+{
+    int id;
+    int position;
+    token_type type;
+    char *symbol;
+} token;
+
+
+struct s_token token_array[256];
+void tokenize(char* input);
+struct s_token get_token(char* input, token* t);
+void printTokens();
+
+#endif
