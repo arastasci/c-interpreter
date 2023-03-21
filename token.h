@@ -23,15 +23,13 @@ typedef enum e_token_type {
 typedef struct s_token
 {
     int id;
-    int position;
     token_type type;
     char *symbol;
 } token;
 
 
-struct s_token token_array[256];
 void tokenize(char* input);
-struct s_token get_token(char* input, token* t);
+int get_token(char* input, token* t);
 void printTokens();
 
 #endif
