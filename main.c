@@ -6,7 +6,7 @@ int main(){
     while(fgets(input, 257, stdin) != NULL){
         tokenize(input);
         printTokens();
-
+        
 
     }
     return 0;
