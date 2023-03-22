@@ -7,7 +7,6 @@ int main(){
         tokenize(input);
         printTokens();
 
-
     }
     return 0;
 }
