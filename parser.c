@@ -4,21 +4,52 @@
 #include "token.c"
 
 typedef struct s_parse_node {
-    token_type op;
-    int value;
+    token token;
     struct s_parse_node* left;
     struct s_parse_node* right;
 } parse_node;
 
-parse_node* parse_stmnt(token* tokens, int* pos) {
-    parse_node* node = parse_term(tokens, pos);
-    while (tokens[*pos].type == OPERATOR && (tokens[*pos].symbol[0] == '+' || tokens[*pos].symbol[0] == '-')) {
-        token_type op = tokens[*pos].type;
-        (*pos)++;
-        parse_node* right = parse_term(tokens, pos);
-        node = create_parse_node(op, node, right);
+parse_node* parse_expr(token* tokens, int* pos) {
+    if (tokens[*pos].type == INTEGER) {
+        parse_node* node = s_parse_node(tokens[*pos], NULL, NULL);
+        *pos++;
+        return node;
     }
-    return node;
+    else if (tokens[*pos].type == IDENTIFIER) {
+        parse_node* node = s_parse_node(tokens[*pos], NULL, NULL);
+        *pos++;
+        return node;
+    }
+    else if (tokens[*pos].type == LEFT_PAREN) {
+        *pos++;
+        parse_node* node = parse_expr(tokens, pos);
+        if (tokens[*pos].type == RIGHT_PAREN) {
+            *pos++;
+            return node;
+        }
+        else {
+            printf("Error: Expected ')'.\n");
+            return NULL;
+        }
+    }
+    else if (tokens[*pos].type == STR_OPERATOR_UNARY) {
+        *pos++;
+        parse_node* node = s_parse_node(tokens[*pos], NULL, NULL);
+        *pos++;
+        return node;
+    }
+    else if (tokens[*pos].type == STR_OPERATOR_BINARY) {
+        *pos++;
+        parse_node* node = s_parse_node(tokens[*pos], NULL, NULL);
+        *pos++;
+        return node;
+    }
+    else {
+        printf("Error: Expected expression.\n");
+        return NULL;
+    }
+    parse_node* node = s_parse_node(tokens[*pos], NULL, NULL);
+
 }
 int parse_stmnt(){}
 
