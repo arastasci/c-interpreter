@@ -1,8 +1,25 @@
+#include <stdbool.h>
 #include "token.h"
 static int id_counter = 0;
 
-token token_array[256];
+token token_array[MAX_TOKEN_LENGTH];
 int token_count;
+const char* binary_operator_funcs[] = {"xor", "ls", "rs", "lr", "rr", };
+const char* unary_operator = "not";
+
+token_type determineTokenTypeOfAlpha(const char* symbol){
+    for(int i = 0; i < 5; i++){
+        if(strcmp(symbol,binary_operator_funcs[i]) == 0) {
+            return STR_OPERATOR_BINARY;
+        }
+    }
+    if(strcmp(symbol, unary_operator) == 0){
+        return STR_OPERATOR_UNARY;
+    }
+    return IDENTIFIER;
+}
+
+
 int get_token(char* input, token* t){
 
     t->id = id_counter++;
@@ -76,16 +93,21 @@ int get_token(char* input, token* t){
         t->symbol = symbol;
     }
     else if (isalpha(input[i])) {
-        t->type = IDENTIFIER;
         while (isalpha(input[i])) {
             symbol[j] = input[i];
             i++;
             j++;
+
         }
         symbol[j] = '\0';
+
         t->symbol = symbol;
+        t->type = determineTokenTypeOfAlpha(symbol);
     }
-    t->type = ERROR;
+    else{
+        t->type = ERROR;
+    }
+
     token_array[t->id] = *t;
     return i;
 }
@@ -106,7 +128,8 @@ void tokenize(char* input){
 
 void printTokens(){
     for(int i = 0; i < token_count; i++){
-        printf("symbol: %s, ",
-         token_array[i].symbol);
+        printf("type: %d, symbol: %s, ",
+         token_array[i].type, token_array[i].symbol);
     }
 }
+

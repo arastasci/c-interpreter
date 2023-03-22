@@ -26,7 +26,8 @@ typedef struct s_token
     token_type type;
     char *symbol;
 } token;
-
+extern token token_array[MAX_TOKEN_LENGTH];
+extern int token_count;
 
 void tokenize(char* input);
 int get_token(char* input, token* t);
