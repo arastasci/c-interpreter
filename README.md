@@ -3,19 +3,21 @@
 ## BNF
 
 ```
-<stmt> => <assignment> <comment>| <var> <comment>|
-<assignment> => <var> = <expr>
-<expr> => <expr> + <term> | <expr> - <term> | <term>
-<term> => <term> * <factor> | term / <factor> | <operation>
-<operation> => xor(<var>, <var>) | ls(<var>, <factor>)
-| rs(<var>, <factor>) | lr(<var>, <factor>) | rr(<var>, <factor>) | not(<var>)
-<var> => <letterlist>
-<letterlist> => <letterlist> <letter> | <letter>
-<letter> => lowercase/uppercase English letters
+<expr> =>  <term> + <expr> | <term> - <expr> | <var> = <expr> | <term>
+<term> => <const> * <term> | <const> / <term> | <operation> | <var>
+<operation> => xor(<expr>, <expr>) | ls(<expr>, <expr>)
+| rs(<expr>, <expr>) | lr(<expr>, <expr>) | rr(<expr>, <expr>) | not(<expr>)
 <comment> => % (str) | ""
 
 Terminals: '(', ')', '=', '+', '-', '/', '*'
 
 ```
 
-===================================================bokaras============================================================
+===============================================================================================================
+```
+<stmt> => <assignment> <comment>| <expr> <comment> | 
+<assignment> => <var> = <expr>
+<expr> => 
+
+m = 3 * 5 - (a + b)
+```
