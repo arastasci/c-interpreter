@@ -148,7 +148,6 @@ int getToken(char* input, token* t){
 }
 
 void tokenize(char* input){
-    token_array = malloc(128 * sizeof(token));
     token_index = 0;
     id_counter = 0;
     int i = 0;
@@ -162,7 +161,12 @@ void tokenize(char* input){
     token_count = cur_token_count;
     current_token = token_array[0];
 }
-
+void allocateArrayMemory(){
+    token_array = malloc(128 * sizeof(token));
+}
+void freeArrayMemory(){
+    free(token_array);
+}
 void printTokens(){
 
     for(int i = 0; i < token_count; i++){

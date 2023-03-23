@@ -1,32 +1,40 @@
-int values[128];
-char* names[128];
-unsigned int hash(char *str)
-{
-    unsigned int hash = 5381;
-    int c;
+#include "hash.h"
 
-    while ((c = *str++))
-        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-
-    return hash;
-}
-
-int setValue(char *name, int value)
-{
-    int index = hash(*name) % 128;
-    while(*names[index] != *name){
-        index++;
+variable* variables;
+void initializeHashMap(){
+    variables = malloc(128 * (sizeof(variable)));
+    for(int i = 0; i < 128; i++){
+        variables[i].name = "";
+        variables[i].value = 0;
     }
-    values[index] = value;
-    names[index] = *name;
-    return value;
 }
-int getValue(char *name)
-{
-    int index = hash(*name) % 128;
-    while(names[index] != *name){
-        index++;
+int hash(const char* identifier){
+    int hashValue = 0;
+    for(int i = 0; i < strlen(identifier); i++){
+        hashValue += identifier[i] * (int)pow(31, i);
     }
-    return values[index];
+    return hashValue;
 }
 
+variable* insert(const char* identifier){
+    int firstHashVal = hash(identifier);
+    for(int i = 0; i < 128; i++){
+        if(strcmp(variables[(firstHashVal + i) % 128].name, "" ) == 0){
+            variable* var = &variables[(firstHashVal + i) % 128];
+            var->name = identifier;
+            return var;
+        }
+    }
+    return NULL; // impossible
+}
+variable* find(const char* identifier){
+    int hashVal = hash(identifier);
+    for(int i = 0; i < 128; i++){
+        if(strcmp(variables[(hashVal + i) % 128].name, identifier) == 0) return &variables[(hashVal + i) % 128];
+    }
+    return NULL;
+}
+
+void deallocHashMap(){
+    free(variables);
+}
