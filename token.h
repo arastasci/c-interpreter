@@ -29,11 +29,15 @@ typedef struct s_token
     token_type type;
     char *symbol;
 } token;
-extern token token_array[MAX_TOKEN_COUNT];
-extern int token_count;
+extern token* token_array;
 
+token getNextToken();
+void matchToken(token_type tokenType);
+extern int token_count;
+extern int token_index;
+extern token current_token;
 void tokenize(char* input);
-int get_token(char* input, token* t);
+int getToken(char* input, token* t);
 void printTokens();
 
 #endif
