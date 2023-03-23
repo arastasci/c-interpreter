@@ -8,4 +8,4 @@ include_directories(.)
 add_executable(cmpe230p1
         main.c
         token.c
-        token.h)
+        token.h parser.h)
