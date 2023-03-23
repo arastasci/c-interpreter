@@ -32,6 +32,8 @@ typedef struct s_token
 extern token* token_array;
 
 token getNextToken();
+void allocateArrayMemory();
+void freeArrayMemory();
 void matchToken(token_type tokenType);
 extern int token_count;
 extern int token_index;

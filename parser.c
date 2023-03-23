@@ -3,9 +3,7 @@
 #include "parser.h"
 #include "token.h"
 
-int parseExpression(); // ?
-char* convertDecimalToBinary(int decimal);
-int convertBinaryToDecimal(const char* binary);
+
 int xorFunction(int operand1, int operand2){
     return operand1 ^ operand2;
 }
@@ -64,6 +62,7 @@ int parseFactor(){
     else if(t.type == IDENTIFIER){
 
         matchToken(IDENTIFIER);
+        return find(t.symbol)->value;
         // return the val of identifier from hashmap
     }
     else if(t.type == STR_OPERATOR_BINARY){
@@ -112,30 +111,25 @@ int parseExpression(){
     }
     return result;
 }
+variable* parseVariable(){
+    token t = current_token;
+    matchToken(IDENTIFIER);
+    if(find(t.symbol) == NULL){
+        return insert(t.symbol);
+    }
+}
+void parseAssignment(){
+    variable* var = parseVariable();
+    matchToken(ASSIGNMENT);
+    var->value = parseExpression();
+}
 
-char* convertDecimalToBinary(int decimal){
-    char* binary = malloc(64 * sizeof(char));
-    int cur_len = 0;
-    for(int i = 0; decimal > 0; i++){
-        binary[i] = decimal % 2;
-        decimal /= 2;
-        cur_len = i;
+void parseStatement(){
+    if(token_array[1].type == ASSIGNMENT){
+        parseAssignment(); // assigns the rhs expr to lhs variable
     }
-    return binary;
-}
-int pow(int base, int power){
-    int res = 1;
-    for(int i = 0 ; i < power; i++){
-        res *= base;
+    else{
+        printf("%d\n",parseExpression());
     }
-    return res;
-}
-int convertBinaryToDecimal(const char* binary){
-    int res = 0;
-    for(int i = 0; i < 64; i++){
-        if(binary[i] == '1'){
-            res += pow(2, i);
-        }
-    }
-    return res;
+    // TODO: how do i even handle the comments lol yasin kocum sende
 }

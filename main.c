@@ -2,14 +2,19 @@
 #include <stdbool.h>
 #include "token.h"
 #include "parser.h"
+#include "hash.h"
 int main(){
     char input [257];
-    while(fgets(input, 257, stdin) != NULL){
+    initializeHashMap();
 
+    while(fgets(input, 257, stdin) != NULL){
+        allocateArrayMemory(); // allocate token array mem
         tokenize(input);
-        printTokens();
-        printf("%d\n",parseExpression());
-        free(token_array);
+        printTokens(); // for debug purposes
+        //printf("%d\n",parseExpression());
+        parseStatement();
+        freeArrayMemory(); // free token array mem
     }
+    deallocHashMap();
     return 0;
 }
