@@ -2,25 +2,47 @@
 #include "token.h"
 static int id_counter = 0;
 
-token token_array[MAX_TOKEN_COUNT];
+
+token current_token;
+
+token* token_array;
 int token_count;
 const char* binary_operator_funcs[] = {"xor", "ls", "rs", "lr", "rr", };
 const char* unary_operator = "not";
 
+
+int token_index = 0;
+token getNextToken(){
+    return token_array[++token_index];
+}
+
+void matchToken(token_type tokenType){
+    // if the token_type matches with the expected type, continue, else raise err
+    if(current_token.type == tokenType){
+        current_token = getNextToken();
+    }
+    else {
+        // raise error
+        printf("Error!");
+        // maybe a goto statement?
+    }
+}
+
+
 token_type determineTokenTypeOfAlpha(const char* symbol){
     for(int i = 0; i < 5; i++){
-        if(strcmp(symbol,binary_operator_funcs[i]) == 0) {
+        if(strncmp(symbol,binary_operator_funcs[i], strlen(binary_operator_funcs[i])) == 0) {
             return STR_OPERATOR_BINARY;
         }
     }
-    if(strcmp(symbol, unary_operator) == 0){
+    if(strncmp(symbol, unary_operator, strlen(unary_operator)) == 0){
         return STR_OPERATOR_UNARY;
     }
     return IDENTIFIER;
 }
 
 
-int get_token(char* input, token* t){
+int getToken(char* input, token* t){
 
     t->id = id_counter++;
 
@@ -126,22 +148,25 @@ int get_token(char* input, token* t){
 }
 
 void tokenize(char* input){
-    
+    token_array = malloc(128 * sizeof(token));
+    token_index = 0;
+    id_counter = 0;
     int i = 0;
     int cur_token_count = 0;
     while (input[i] != '\0' && input[i] != '\n') {
         token t;
-        int j = get_token(&input[i], &t);
+        int j = getToken(&input[i], &t);
         cur_token_count++;
         i+= j;
     }
     token_count = cur_token_count;
-
+    current_token = token_array[0];
 }
 
 void printTokens(){
+
     for(int i = 0; i < token_count; i++){
-        printf("type: %d, symbol: %s, ",
+        printf("type: %d, symbol: %s\n",
          token_array[i].type, token_array[i].symbol);
     }
 }

@@ -2,54 +2,58 @@
 #include <stdbool.h>
 #include "parser.h"
 #include "token.h"
-token current_token;
-int tokenIndex = 0;
 
-token getNextToken(){
-    return token_array[tokenIndex++];
-}
-
-void matchToken(token_type tokenType){
-    // if the token_type matches with the expected type, continue, else raise err
-    if(current_token.type == tokenType){
-        current_token = getNextToken();
-    }
-    else {
-        // raise error
-        printf("Error!");
-        // maybe a goto statement?
-    }
-}
 int parseExpression(); // ?
+char* convertDecimalToBinary(int decimal);
+int convertBinaryToDecimal(const char* binary);
+int xorFunction(int operand1, int operand2){
+    return operand1 ^ operand2;
+}
+int lsFunction(int operand, int shift_amount){
+    return operand << shift_amount;
+}
+int rsFunction(int operand, int shift_amount){
+    return operand >> shift_amount;
+}
+int lrFunction(int operand, int rotate_amount){
+    return (operand << rotate_amount)|(operand >> (64 - rotate_amount));
+
+}
+int rrFunction(int operand, int rotate_amount){
+    return (operand >> rotate_amount)|(operand << (64 - rotate_amount));
+}
+
 int parseBinaryFunction(const char* operand_symbol){
     matchToken(LEFT_PAREN);
     int operand1 = parseExpression();
     matchToken(SEPARATOR);
     int operand2 = parseExpression();
     matchToken(RIGHT_PAREN);
-    int result;
-    if(strcmp(operand_symbol,"xor") == 0){
 
+    if(strncmp(operand_symbol,"xor",3) == 0){
+        return xorFunction(operand1, operand2);
     }
-    else if(strcmp(operand_symbol,"ls") == 0){
+    if(strncmp(operand_symbol,"ls",3) == 0){
+        return lsFunction(operand1, operand2);
+    }
+    if(strncmp(operand_symbol,"rs", 2) == 0){
+        return rsFunction(operand1, operand2);
+    }
+    if(strncmp(operand_symbol,"lr", 2) == 0){
+        return lrFunction(operand1, operand2);
+    }
+    // only option left is rr
+    return rrFunction(operand1, operand2);
 
-    }
-    else if(strcmp(operand_symbol,"rs") == 0){
-
-    }
-    else if(strcmp(operand_symbol,"lr") == 0){
-
-    }
-    else if(strcmp(operand_symbol,"rr") == 0){
-
-    }
-    return result;
 }
 
-int parseUnaryFunction(){
+int parseUnaryFunction(){ // not function
     matchToken(LEFT_PAREN);
-    // not 
+
+    int res = parseExpression();
+    res = res ^ -1;
     matchToken(RIGHT_PAREN);
+    return res;
 }
 int parseFactor(){
     token t = current_token;
@@ -69,7 +73,7 @@ int parseFactor(){
     }
     else if(t.type == STR_OPERATOR_UNARY){
         matchToken(STR_OPERATOR_UNARY);
-        return parseUnaryFunction(); // it's only not() though :D
+        return parseUnaryFunction(); // it's only not(<var>) though :D // lovely views also :D
     }
     else if (t.type == LEFT_PAREN){
         matchToken(LEFT_PAREN);
@@ -83,7 +87,7 @@ int parseTerm(){
     while(current_token.type == OPERATOR_MULTIPLICATIVE){
         token t = current_token;
         matchToken(OPERATOR_MULTIPLICATIVE);
-        if(strcmp(t.symbol,"*")){
+        if(strncmp(t.symbol,"*", 1) == 0){
             result *= parseFactor();
         }
         else{
@@ -96,10 +100,10 @@ int parseTerm(){
 
 int parseExpression(){
     int result = parseTerm();
-    while(current_token.type == OPERATOR_ADDITIVE){
+    while(token_index < token_count && current_token.type == OPERATOR_ADDITIVE){
         token t = current_token;
         matchToken(OPERATOR_ADDITIVE);
-        if(strcmp(t.symbol,"+")){
+        if(strncmp(t.symbol,"+", 1) == 0){
             result += parseTerm();
         }
         else{
@@ -109,13 +113,12 @@ int parseExpression(){
     return result;
 }
 
-char* convertDecimalToBinary(const char* decimal){
-    int decimal_integer = atoi(decimal);
+char* convertDecimalToBinary(int decimal){
     char* binary = malloc(64 * sizeof(char));
     int cur_len = 0;
-    for(int i = 0; decimal_integer > 0; i++){
-        binary[i] = decimal_integer % 2;
-        decimal_integer /= 2;
+    for(int i = 0; decimal > 0; i++){
+        binary[i] = decimal % 2;
+        decimal /= 2;
         cur_len = i;
     }
     return binary;

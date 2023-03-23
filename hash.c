@@ -14,7 +14,7 @@ unsigned int hash(char *str)
 int setValue(char *name, int value)
 {
     int index = hash(*name) % 128;
-    while(names[index] != *name){
+    while(*names[index] != *name){
         index++;
     }
     values[index] = value;
