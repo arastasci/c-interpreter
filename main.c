@@ -4,6 +4,7 @@
 int main(){
     char input [257];
     while(fgets(input, 257, stdin) != NULL){
+
         tokenize(input);
         printTokens();
     }
