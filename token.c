@@ -2,7 +2,7 @@
 #include "token.h"
 static int id_counter = 0;
 
-token token_array[MAX_TOKEN_LENGTH];
+token token_array[MAX_TOKEN_COUNT];
 int token_count;
 const char* binary_operator_funcs[] = {"xor", "ls", "rs", "lr", "rr", };
 const char* unary_operator = "not";
@@ -44,29 +44,42 @@ int get_token(char* input, token* t){
     #pragma region operators
 
     else if (input[i] == '+') {
-        t->type = OPERATOR;
+        t->type = OPERATOR_ADDITIVE;
         t->symbol = "+";
         i++;
     }
 
     else if (input[i] == '-') {
-        t->type = OPERATOR;
+        t->type = OPERATOR_ADDITIVE;
         t->symbol = "-";
         i++;
     }
     else if (input[i] == '*') {
-        t->type = OPERATOR;
+        t->type = OPERATOR_MULTIPLICATIVE;
         t->symbol = "*";
         i++;
     }
     else if (input[i] == '/') {
-        t->type = OPERATOR;
+        t->type = OPERATOR_MULTIPLICATIVE;
         t->symbol = "/";
         i++;
     }
-
+    else if (input[i] == '&') {
+        t->type = OPERATOR_BITWISE;
+        t->symbol = "&";
+        i++;
+    }
+    else if (input[i] == '|') {
+        t->type = OPERATOR_BITWISE;
+        t->symbol = "|";
+        i++;
+    }
     #pragma endregion
-
+    else if (input[i] == ','){
+        t->type = SEPARATOR;
+        t->symbol = ",";
+        i++;
+    }
     else if (input[i] == '(') {
         t->type = LEFT_PAREN;
         t->symbol = "(";

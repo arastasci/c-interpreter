@@ -6,9 +6,11 @@
 #include <ctype.h>
 
 #define MAX_TOKEN_LENGTH 256
-
+#define MAX_TOKEN_COUNT 128
 typedef enum e_token_type {
-    OPERATOR,   // +, -, *, /
+    OPERATOR_ADDITIVE,   // +, -
+    OPERATOR_MULTIPLICATIVE,  // *, /
+    OPERATOR_BITWISE, // &, |
     LEFT_PAREN, // (
     RIGHT_PAREN, // )
     STR_OPERATOR_UNARY, //  'not'
@@ -17,6 +19,7 @@ typedef enum e_token_type {
     ASSIGNMENT, // =
     INTEGER,   // 1, 2, 3, ...
     COMMENT,  // % ...
+    SEPARATOR, // `,`
     ERROR     // invalid token
 } token_type;
 
@@ -26,7 +29,7 @@ typedef struct s_token
     token_type type;
     char *symbol;
 } token;
-extern token token_array[MAX_TOKEN_LENGTH];
+extern token token_array[MAX_TOKEN_COUNT];
 extern int token_count;
 
 void tokenize(char* input);
