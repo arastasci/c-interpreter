@@ -1,58 +1,63 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include "parser.h"
 #include "token.h"
-#include "token.c"
+token current_token;
+int tokenIndex = 0;
 
-typedef struct s_parse_node {
-    token token;
-    struct s_parse_node* left;
-    struct s_parse_node* right;
-} parse_node;
+token getNextToken(){
+    return token_array[tokenIndex++];
+}
 
-parse_node* parse_expr(token* tokens, int* pos) {
-    if (tokens[*pos].type == INTEGER) {
-        parse_node* node = s_parse_node(tokens[*pos], NULL, NULL);
-        *pos++;
-        return node;
-    }
-    else if (tokens[*pos].type == IDENTIFIER) {
-        parse_node* node = s_parse_node(tokens[*pos], NULL, NULL);
-        *pos++;
-        return node;
-    }
-    else if (tokens[*pos].type == LEFT_PAREN) {
-        *pos++;
-        parse_node* node = parse_expr(tokens, pos);
-        if (tokens[*pos].type == RIGHT_PAREN) {
-            *pos++;
-            return node;
-        }
-        else {
-            printf("Error: Expected ')'.\n");
-            return NULL;
-        }
-    }
-    else if (tokens[*pos].type == STR_OPERATOR_UNARY) {
-        *pos++;
-        parse_node* node = s_parse_node(tokens[*pos], NULL, NULL);
-        *pos++;
-        return node;
-    }
-    else if (tokens[*pos].type == STR_OPERATOR_BINARY) {
-        *pos++;
-        parse_node* node = s_parse_node(tokens[*pos], NULL, NULL);
-        *pos++;
-        return node;
+void matchToken(token_type tokenType){
+    // if the token_type matches with the expected type, continue, else raise err
+    if(current_token.type == tokenType){
+        current_token = getNextToken();
     }
     else {
-        printf("Error: Expected expression.\n");
-        return NULL;
+        // raise error
+        printf("Error!");
     }
-    parse_node* node = s_parse_node(tokens[*pos], NULL, NULL);
-
 }
-int parse_stmnt(){}
+int parseExpression(); // ?
+int parseFactor(){
+    token t = current_token;
+    if(t.type == INTEGER){
+        matchToken(INTEGER);
+        return atoi(t.symbol);
+    }
+    else if (t.type == LEFT_PAREN){
+        matchToken(LEFT_PAREN);
+        return parseExpression();
+    }
+}
+int parseTerm(){
+    int result = parseFactor();
+    while(current_token.type == OPERATOR_MULTIPLICATIVE){
+        token t = current_token;
+        matchToken(OPERATOR_MULTIPLICATIVE);
+        if(strcmp(t.symbol,"*")){
+            result *= parseFactor();
+        }
+        else{
+            result /= parseFactor();
+        }
 
+    }
+    return result;
+}
 
-
+int parseExpression(){
+    int result = parseTerm();
+    while(current_token.type == OPERATOR_ADDITIVE){
+        token t = current_token;
+        matchToken(OPERATOR_ADDITIVE);
+        if(strcmp(t.symbol,"+")){
+            result += parseTerm();
+        }
+        else{
+            result -= parseTerm();
+        }
+    }
+    return result;
 }
