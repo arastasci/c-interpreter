@@ -48,12 +48,12 @@ int parseBinaryFunction(const char* operand_symbol){
 int parseUnaryFunction(){ // not function
     matchToken(LEFT_PAREN);
 
-    int res = parseExpression();
+    int res = parseExpression(); 
     res = res ^ -1;
     matchToken(RIGHT_PAREN);
     return res;
 }
-int parseFactor(){
+int parseFactor(){ 
     token t = current_token;
     if(t.type == INTEGER){
         matchToken(INTEGER);
@@ -62,8 +62,9 @@ int parseFactor(){
     else if(t.type == IDENTIFIER){
 
         matchToken(IDENTIFIER);
-        return find(t.symbol)->value;
-        // return the val of identifier from hashmap
+        variable* var = find(t.symbol);
+        return var!=NULL ? var->value : insert(t.symbol)->value;
+        // if var is not in hashmap (not assigned previously), return 0, else return the value of var
     }
     else if(t.type == STR_OPERATOR_BINARY){
         const char* symbol = t.symbol;
@@ -72,7 +73,7 @@ int parseFactor(){
     }
     else if(t.type == STR_OPERATOR_UNARY){
         matchToken(STR_OPERATOR_UNARY);
-        return parseUnaryFunction(); // it's only not(<var>) though :D // lovely views also :D
+        return parseUnaryFunction(); // it's only not(<var>) though :D // lovely views also :D anani sikeyim aras
     }
     else if (t.type == LEFT_PAREN){
         matchToken(LEFT_PAREN);
@@ -109,13 +110,27 @@ int parseExpression(){
             result -= parseTerm();
         }
     }
+    while (token_index < token_count && current_token.type == OPERATOR_BITWISE){
+        token t = current_token;
+        matchToken(OPERATOR_BITWISE);
+        if(strncmp(t.symbol,"&", 1) == 0){
+            result &= parseTerm();
+        }
+        else{
+            result |= parseTerm();
+        }
+    }
     return result;
 }
 variable* parseVariable(){
     token t = current_token;
     matchToken(IDENTIFIER);
-    if(find(t.symbol) == NULL){
+    variable *var = find(t.symbol);
+    if(var == NULL){
         return insert(t.symbol);
+    }
+    else{
+        return var;
     }
 }
 void parseAssignment(){

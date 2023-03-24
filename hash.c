@@ -9,11 +9,19 @@ void initializeHashMap(){
     }
 }
 int hash(const char* identifier){
-    int hashValue = 0;
-    for(int i = 0; i < strlen(identifier); i++){
-        hashValue += identifier[i] * (int)pow(31, i);
+    // int hashValue = 0;
+    // for(int i = 0; i < strlen(identifier); i++){
+    //     hashValue += identifier[i] * (int)pow(31, i);
+    // }
+    // return hashValue;
+    unsigned long hash = 5381;
+    int c;
+
+    while (c = *identifier++){
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
     }
-    return hashValue;
+    return hash % 128;
+
 }
 
 variable* insert(const char* identifier){
