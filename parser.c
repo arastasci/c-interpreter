@@ -63,7 +63,7 @@ int parseFactor(){
 
         matchToken(IDENTIFIER);
         variable* var = find(t.symbol);
-        return var!=NULL ? var->value : 0; 
+        return var!=NULL ? var->value : insert(t.symbol)->value;
         // if var is not in hashmap (not assigned previously), return 0, else return the value of var
     }
     else if(t.type == STR_OPERATOR_BINARY){
