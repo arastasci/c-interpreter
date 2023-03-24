@@ -11,7 +11,6 @@ int main(){
         allocateArrayMemory(); // allocate token array mem
         tokenize(input);
         printTokens(); // for debug purposes
-        //printf("%d\n",parseExpression());
         parseStatement();
         freeArrayMemory(); // free token array mem
     }

@@ -110,6 +110,16 @@ int parseExpression(){
             result -= parseTerm();
         }
     }
+    while (token_index < token_count && current_token.type == OPERATOR_BITWISE){
+        token t = current_token;
+        matchToken(OPERATOR_BITWISE);
+        if(strncmp(t.symbol,"&", 1) == 0){
+            result &= parseTerm();
+        }
+        else{
+            result |= parseTerm();
+        }
+    }
     return result;
 }
 variable* parseVariable(){
