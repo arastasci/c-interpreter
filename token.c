@@ -165,7 +165,7 @@ void allocateArrayMemory(){
     token_array = malloc(128 * sizeof(token));
 }
 void freeArrayMemory(){
-    free(token_array);
+//    free(token_array);
     memset(token_array, 0, 128 * sizeof(token));
 }
 void printTokens(){
