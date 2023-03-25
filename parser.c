@@ -22,9 +22,9 @@ int rrFunction(int operand, int rotate_amount){ // rr function
 response parseBinaryFunction(const char* operand_symbol){ // binary functions
     response response;
     matchToken(LEFT_PAREN);
-    int operand1 = parseExpression().value;
+    int operand1 = parseBitwiseOrExpression().value;
     matchToken(SEPARATOR);
-    int operand2 = parseExpression().value;
+    int operand2 = parseBitwiseOrExpression().value;
     matchToken(RIGHT_PAREN);
 
     if(strncmp(operand_symbol,"xor",3) == 0){
@@ -59,7 +59,7 @@ response parseBinaryFunction(const char* operand_symbol){ // binary functions
 response parseUnaryFunction(){ // not function
     matchToken(LEFT_PAREN);
     response response;
-    int res = parseExpression().value;
+    int res = parseBitwiseOrExpression().value;
     res = res ^ -1;
     matchToken(RIGHT_PAREN);
     response.value = res;
@@ -92,7 +92,7 @@ response parseFactor(){
     }
     else if (t.type == LEFT_PAREN){
         matchToken(LEFT_PAREN);
-        int res = parseExpression().value;
+        int res = parseBitwiseOrExpression().value;
         matchToken(RIGHT_PAREN);
         response.value = res;
         return response;
