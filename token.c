@@ -1,4 +1,3 @@
-#include <stdbool.h>
 #include "token.h"
 static int id_counter = 0;
 
@@ -42,7 +41,7 @@ token_type determineTokenTypeOfAlpha(const char* symbol){
 }
 
 
-int getToken(char* input, token* t){
+int getToken(char* input, token* t, bool* exit_early){
 
     t->id = id_counter++;
 
@@ -55,12 +54,15 @@ int getToken(char* input, token* t){
 
     if (input[i] == '\0' || input[i] == '\n') {
         t->type = ERROR;
+        *exit_early = true;
+        return 0;
         i++;
     }
 
     else if (input[i] == '%') {
-        t->type = COMMENT;
-        i++;
+        *exit_early = true;
+        return 0;
+
     }
 
     #pragma region operators
@@ -152,9 +154,12 @@ void tokenize(char* input){
     id_counter = 0;
     int i = 0;
     int cur_token_count = 0;
+    bool exit_early = false;
     while (input[i] != '\0' && input[i] != '\n') {
         token t;
-        int j = getToken(&input[i], &t);
+
+        int j = getToken(&input[i], &t, &exit_early);
+        if(exit_early) break;
         cur_token_count++;
         i+= j;
     }

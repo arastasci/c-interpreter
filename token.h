@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 #define MAX_TOKEN_LENGTH 256
 #define MAX_TOKEN_COUNT 128
@@ -39,7 +40,7 @@ extern int token_count;
 extern int token_index;
 extern token current_token;
 void tokenize(char* input);
-int getToken(char* input, token* t);
+int getToken(char* input, token* t, bool* exit_early);
 void printTokens();
 
 #endif
