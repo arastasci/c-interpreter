@@ -84,6 +84,8 @@ int_64 parseFactor(){
         return res;
     }
     // raise error from token.c
+    raiseTokenError();
+    return 1; // as terms have multiplicative tokens, this value evades division by zero errors
 }
 int_64 parseTerm(){
     int_64 result = parseFactor();
@@ -148,7 +150,7 @@ int_64 parseBitwiseOrExpression(){
     return result;
 };
 void parseAssignment(){
-    variable* var = parseVariable();
+    variable* var = parseVariable(); // TODO: mustnt initialize var if there is error
     matchToken(ASSIGNMENT);
     int_64 response = parseBitwiseOrExpression();
     if(!has_error){

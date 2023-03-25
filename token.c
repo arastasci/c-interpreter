@@ -17,11 +17,11 @@ token getNextToken(){
 
 void matchToken(token_type tokenType){
     // if the token_type matches with the expected type, continue, else raise err
-    if(current_token.type == tokenType){
+    if(token_index <=token_count && current_token.type == tokenType){
         current_token = getNextToken();
     }
     else {
-        has_error = true;
+        raiseTokenError();
     }
 }
 
@@ -140,7 +140,7 @@ int getToken(char* input, token* t, bool* exit_early){
         t->type = determineTokenTypeOfAlpha(symbol);
     }
     else{
-        t->type = ERROR;
+        raiseTokenError();
     }
 
     token_array[t->id] = *t;
@@ -158,6 +158,7 @@ void tokenize(char* input){
 
         int j = getToken(&input[i], &t, &exit_early);
         if(exit_early) break;
+        if(has_error) return;
         cur_token_count++;
         i+= j;
     }
@@ -180,3 +181,6 @@ void printTokens(){
    // printf("done");
 }
 
+void raiseTokenError(){
+    has_error = true;
+}

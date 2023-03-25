@@ -40,6 +40,7 @@ extern bool has_error;
 extern int token_count;
 extern int token_index;
 extern token current_token;
+void raiseTokenError();
 void tokenize(char* input);
 int getToken(char* input, token* t, bool* exit_early);
 void printTokens();
