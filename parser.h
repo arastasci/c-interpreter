@@ -10,6 +10,7 @@ void parseStatement();
 response parseExpression();
 response parseTerm();
 response parseFactor();
-
+response parseBitwiseOrExpression();
+response parseBitwiseAndExpression();
 
 #endif
