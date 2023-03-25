@@ -14,7 +14,6 @@ int rsFunction(int operand, int shift_amount){ // rs function
 }
 int lrFunction(int operand, int rotate_amount){ // lr function
     return (operand << rotate_amount)|(operand >> (64 - rotate_amount));
-
 }
 int rrFunction(int operand, int rotate_amount){ // rr function
     return (operand >> rotate_amount)|(operand << (64 - rotate_amount));
@@ -126,18 +125,6 @@ response parseExpression(){
     response response = parseTerm();
     if (response.error == 1) return response; // if there is an error, return the error (no need to continue)
     int result = response.value;
-    while (token_index < token_count && current_token.type == OPERATOR_BITWISE){    // bitwise 'or' and 'and' (second lowest precedency in the grammar)
-        token t = current_token;
-        matchToken(OPERATOR_BITWISE);
-        response = parseTerm();
-        if (response.error == 1) return response; // if there is an error, return the error (no need to continue)
-        if(strncmp(t.symbol,"&", 1) == 0){
-            result &= response.value;
-        }
-        else{
-            result |= response.value;
-        }
-    }
     while(token_index < token_count && current_token.type == OPERATOR_ADDITIVE){    // add or subtract (lowest precedency in the grammar)
         token t = current_token;
         matchToken(OPERATOR_ADDITIVE);
@@ -149,10 +136,6 @@ response parseExpression(){
         else{
             result -= response.value;
         }
-    }
-    if(current_token.symbol != NULL){
-        response.error = 1;
-        return response;
     }
     printTokens();
     printf("type: %d, symbol: %s\n",
@@ -171,10 +154,43 @@ variable* parseVariable(){  // returns the variable pointer
         return var; // if it is, return the pointer
     }
 }
+
+response parseBitwiseAndExpression(){
+    response response = parseExpression();
+    if (response.error == 1) return response; // if there is an error, return the error (no need to continue)
+    int result = response.value;
+    while (token_index < token_count && strcmp(current_token.symbol, "&")==0){    // bitwise 'or' and 'and' (second lowest precedency in the grammar)
+        token t = current_token;
+        matchToken(OPERATOR_BITWISE);
+        response = parseExpression();
+        if (response.error == 1) return response; // if there is an error, return the error (no need to continue)
+        result &= response.value;
+    }
+    response.value = result;
+    return response;
+};
+response parseBitwiseOrExpression(){
+    response response = parseBitwiseAndExpression();
+    if (response.error == 1) return response; // if there is an error, return the error (no need to continue)
+    int result = response.value;
+    while (token_index < token_count && strcmp(current_token.symbol, "|")==0){    // bitwise 'or' and 'and' (second lowest precedency in the grammar)
+        token t = current_token;
+        matchToken(OPERATOR_BITWISE);
+        response = parseBitwiseAndExpression();
+        if (response.error == 1) return response; // if there is an error, return the error (no need to continue)
+        result |= response.value;
+    }
+    if(current_token.symbol != NULL){
+        response.error = 1;
+        return response;
+    }
+    response.value = result;
+    return response;
+};
 void parseAssignment(){
     variable* var = parseVariable();
     matchToken(ASSIGNMENT);
-    response response = parseExpression();
+    response response = parseBitwiseOrExpression();
     if (response.error != 1){
         var->value = response.value;
     }
@@ -188,7 +204,7 @@ void parseStatement(){  // two types of statements: assignment and expression
         parseAssignment(); // assigns the rhs expr to lhs variable
     }
     else{
-        response response = parseExpression();
+        response response = parseBitwiseOrExpression();
         if (response.error != 1){
             printf("%d\n",response.value);
         }
