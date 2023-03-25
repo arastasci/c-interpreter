@@ -36,6 +36,7 @@ token getNextToken();
 void allocateArrayMemory();
 void freeArrayMemory();
 void matchToken(token_type tokenType);
+extern bool has_error;
 extern int token_count;
 extern int token_index;
 extern token current_token;

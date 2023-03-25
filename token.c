@@ -1,7 +1,7 @@
 #include "token.h"
 static int id_counter = 0;
 
-
+bool has_error;
 token current_token;
 
 token* token_array;
@@ -21,9 +21,7 @@ void matchToken(token_type tokenType){
         current_token = getNextToken();
     }
     else {
-        // raise error
-        printf("Error!");
-        // maybe a goto statement?
+        has_error = true;
     }
 }
 
@@ -179,5 +177,6 @@ void printTokens(){
         printf("type: %d, symbol: %s\n",
          token_array[i].type, token_array[i].symbol);
     }
+   // printf("done");
 }
 

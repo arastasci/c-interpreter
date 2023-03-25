@@ -2,15 +2,12 @@
 #define PARSE_H
 #include "token.h"
 #include "hash.h"
-typedef struct s_response{
-    int error;
-    int value;
-} response;
+#define int_64 long long int
 void parseStatement();
-response parseExpression();
-response parseTerm();
-response parseFactor();
-response parseBitwiseOrExpression();
-response parseBitwiseAndExpression();
+int_64 parseExpression();
+int_64 parseTerm();
+int_64 parseFactor();
+int_64 parseBitwiseOrExpression();
+int_64 parseBitwiseAndExpression();
 
 #endif
