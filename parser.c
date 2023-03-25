@@ -174,7 +174,13 @@ variable* parseVariable(){  // returns the variable pointer
 void parseAssignment(){
     variable* var = parseVariable();
     matchToken(ASSIGNMENT);
-    var->value = parseExpression().value;
+    response response = parseExpression();
+    if (response.error != 1){
+        var->value = response.value;
+    }
+    else{
+        printf("Error!\n");
+    }
 }
 
 void parseStatement(){  // two types of statements: assignment and expression
