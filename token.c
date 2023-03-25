@@ -4,7 +4,7 @@ static int id_counter = 0;
 
 
 token current_token;
-
+bool error;
 token* token_array;
 int token_count;
 const char* binary_operator_funcs[] = {"xor", "ls", "rs", "lr", "rr", };
@@ -23,7 +23,7 @@ void matchToken(token_type tokenType){
     }
     else {
         // raise error
-        printf("Error!");
+        error = true;
         // maybe a goto statement?
     }
 }

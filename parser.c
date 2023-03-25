@@ -43,14 +43,14 @@ response parseBinaryFunction(const char* operand_symbol){ // binary functions
         response.value = lrFunction(operand1, operand2);
         return response;
     }
-    if (strncmp(operand_symbol,"lr", 2) == 0){
+    if (strncmp(operand_symbol,"rr", 2) == 0){
         response.value = rrFunction(operand1, operand2);
         return response;
     }
-    else{ // if none of the above, return error
-        response.error = 1;
-        return response;
-    }
+//    else{ // if none of the above, return error
+//        ;
+//        return response;
+//    }
     // only option left is rr
     return response;
 
@@ -70,12 +70,14 @@ response parseFactor(){
     response response;
     if(t.type == INTEGER){ //
         matchToken(INTEGER);
+        if (error) response.error = true;
         response.value = atoi(t.symbol);
         return response;
     }
     else if(t.type == IDENTIFIER){
 
         matchToken(IDENTIFIER);
+        if (error) response.error = true;
         variable* var = find(t.symbol);
         response.value = var!=NULL ? var->value : insert(t.symbol)->value;
         return response;
@@ -84,52 +86,62 @@ response parseFactor(){
     else if(t.type == STR_OPERATOR_BINARY){
         const char* symbol = t.symbol;
         matchToken(STR_OPERATOR_BINARY);
+        if (error) response.error = true;
         return parseBinaryFunction(symbol);
     }
     else if(t.type == STR_OPERATOR_UNARY){
         matchToken(STR_OPERATOR_UNARY);
+        if (error) response.error = true;
         return parseUnaryFunction(); // it's only not(<var>) though :D // lovely views also :D anani sikeyim aras
     }
     else if (t.type == LEFT_PAREN){
         matchToken(LEFT_PAREN);
+        if (error) response.error = true;
         int res = parseBitwiseOrExpression().value;
         matchToken(RIGHT_PAREN);
+        if (error) response.error = true;
         response.value = res;
         return response;
     }
-    else{
-        response.error = 1;
+    else {
+        response.error = true;
         return response;
     }
 }
 response parseTerm(){
     response response = parseFactor();
-    if (response.error == 1) return response; // if there is an error, return the error (no need to continue)
+    if (response.error == true) return response; // if there is an error, return the error (no need to continue)
     int result = response.value; // first factor
     while(current_token.type == OPERATOR_MULTIPLICATIVE){
         token t = current_token;
         matchToken(OPERATOR_MULTIPLICATIVE);
+        if(current_token.type == OPERATOR_ADDITIVE){
+            response.error = true;
+            return response;
+        }
+        if (error) response.error = true;
         if(strncmp(t.symbol,"*", 1) == 0){
             result *= parseFactor().value;
         }
         else{
             result /= parseFactor().value;
         }
-
     }
+
     response.value = result;
     return response;
 }
 
 response parseExpression(){
     response response = parseTerm();
-    if (response.error == 1) return response; // if there is an error, return the error (no need to continue)
+    if (response.error == true) return response; // if there is an error, return the error (no need to continue)
     int result = response.value;
     while(token_index < token_count && current_token.type == OPERATOR_ADDITIVE){    // add or subtract (lowest precedency in the grammar)
         token t = current_token;
         matchToken(OPERATOR_ADDITIVE);
         response = parseTerm();
-        if (response.error == 1) return response; // if there is an error, return the error (no need to continue)
+        if (error) response.error = true;
+        if (response.error == true) return response; // if there is an error, return the error (no need to continue)
         if(strncmp(t.symbol,"+", 1) == 0){
             result += response.value;
         }
@@ -137,9 +149,6 @@ response parseExpression(){
             result -= response.value;
         }
     }
-    printTokens();
-    printf("type: %d, symbol: %s\n",
-           current_token.type, current_token.symbol);
     response.value = result;
     return response;
 }
@@ -157,31 +166,33 @@ variable* parseVariable(){  // returns the variable pointer
 
 response parseBitwiseAndExpression(){
     response response = parseExpression();
-    if (response.error == 1) return response; // if there is an error, return the error (no need to continue)
+    if (response.error == true) return response; // if there is an error, return the error (no need to continue)
     int result = response.value;
     while (token_index < token_count && strcmp(current_token.symbol, "&")==0){    // bitwise 'or' and 'and' (second lowest precedency in the grammar)
         token t = current_token;
         matchToken(OPERATOR_BITWISE);
         response = parseExpression();
-        if (response.error == 1) return response; // if there is an error, return the error (no need to continue)
+        if (error) response.error = true;
+        if (response.error == true) return response; // if there is an error, return the error (no need to continue)
         result &= response.value;
     }
     response.value = result;
     return response;
 };
 response parseBitwiseOrExpression(){
-    response response = parseBitwiseAndExpression();
-    if (response.error == 1) return response; // if there is an error, return the error (no need to continue)
+     response response = parseBitwiseAndExpression();
+    if (response.error == true) return response; // if there is an error, return the error (no need to continue)
     int result = response.value;
     while (token_index < token_count && strcmp(current_token.symbol, "|")==0){    // bitwise 'or' and 'and' (second lowest precedency in the grammar)
         token t = current_token;
         matchToken(OPERATOR_BITWISE);
         response = parseBitwiseAndExpression();
-        if (response.error == 1) return response; // if there is an error, return the error (no need to continue)
+        if (error) response.error = true;
+        if (response.error == true) return response; // if there is an error, return the error (no need to continue)
         result |= response.value;
     }
-    if(current_token.symbol != NULL){
-        response.error = 1;
+    if(current_token.symbol != NULL && current_token.type != SEPARATOR){ // 11
+        response.error = true;
         return response;
     }
     response.value = result;
@@ -191,7 +202,8 @@ void parseAssignment(){
     variable* var = parseVariable();
     matchToken(ASSIGNMENT);
     response response = parseBitwiseOrExpression();
-    if (response.error != 1){
+    if (error) response.error = true;
+    if (response.error == false){
         var->value = response.value;
     }
     else{
@@ -205,7 +217,7 @@ void parseStatement(){  // two types of statements: assignment and expression
     }
     else{
         response response = parseBitwiseOrExpression();
-        if (response.error != 1){
+        if (response.error == false){
             printf("%d\n",response.value);
         }
         else{

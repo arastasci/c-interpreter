@@ -4,10 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 #define MAX_TOKEN_LENGTH 256
 #define MAX_TOKEN_COUNT 128
 typedef enum e_token_type {
+    ERROR, // invalid token
     OPERATOR_ADDITIVE,   // +, -
     OPERATOR_MULTIPLICATIVE,  // *, /
     OPERATOR_BITWISE, // &, |
@@ -19,8 +21,7 @@ typedef enum e_token_type {
     ASSIGNMENT, // =
     INTEGER,   // 1, 2, 3, ...
     COMMENT,  // % ...
-    SEPARATOR, // `,`
-    ERROR     // invalid token
+    SEPARATOR // `,`
 } token_type;
 
 typedef struct s_token
@@ -30,7 +31,7 @@ typedef struct s_token
     char *symbol;
 } token;
 extern token* token_array;
-
+extern bool error;
 token getNextToken();
 void allocateArrayMemory();
 void freeArrayMemory();

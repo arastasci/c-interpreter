@@ -11,7 +11,8 @@ int main(){
         tokenize(input);
         printTokens(); // for debug purposes
         parseStatement();
-        freeArrayMemory(); // free token array mem
+        freeArrayMemory();// free token array mem
+        error = false;
     }
     deallocHashMap();
     return 0;
