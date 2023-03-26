@@ -31,7 +31,7 @@ int_64 parseBinaryFunction(const char* operand_symbol){ // binary functions
          return xorFunction(operand1, operand2);
 
     }
-    if(strncmp(operand_symbol,"ls",3) == 0){
+    if(strncmp(operand_symbol,"ls",2) == 0){
          return lsFunction(operand1, operand2);
     }
     if(strncmp(operand_symbol,"rs", 2) == 0){
@@ -150,6 +150,7 @@ int_64 parseBitwiseOrExpression(){
     return result;
 };
 void parseAssignment(){
+    bool justInitialized = find(current_token.symbol) == NULL;
     variable* var = parseVariable(); // TODO: mustnt initialize var if there is error
     matchToken(ASSIGNMENT);
     int_64 response = parseBitwiseOrExpression();
@@ -157,6 +158,7 @@ void parseAssignment(){
         var->value = response;
     }
     else{
+        if(justInitialized) var->name = ""; // delete variable from the array if there is an error
         printf("Error!\n");
     }
 }
