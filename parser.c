@@ -165,7 +165,7 @@ void parseStatement(){  // two types of statements: assignment and expression
     if(token_array[1].type == ASSIGNMENT){
         parseAssignment(); // assigns the rhs expr to lhs variable
     }
-    else{
+    else if(token_count != 0){
         int_64 result = parseBitwiseOrExpression();
         if(!has_error && token_index == token_count){
             printf("%lld\n", result);
@@ -174,5 +174,6 @@ void parseStatement(){  // two types of statements: assignment and expression
             printf("Error!\n");
         }
     }
+
     // TODO: how do i even handle the comments lol yasin kocum sende
 }
