@@ -3,19 +3,19 @@
 #include "parser.h"
 #include "token.h"
 
-int xorFunction(int operand1, int operand2){ // xor function
+int_64 xorFunction(int_64 operand1, int_64 operand2){ // xor function
     return operand1 ^ operand2;
 }
-int lsFunction(int operand, int shift_amount){ // ls function
+int_64 lsFunction(int_64 operand, int_64 shift_amount){ // ls function
     return operand << shift_amount;
 }
-int rsFunction(int operand, int shift_amount){ // rs function
+int_64 rsFunction(int_64 operand, int_64 shift_amount){ // rs function
     return operand >> shift_amount;
 }
-int lrFunction(int operand, int rotate_amount){ // lr function
+int_64 lrFunction(int_64 operand, int_64 rotate_amount){ // lr function
     return (operand << rotate_amount)|(operand >> (64 - rotate_amount));
 }
-int rrFunction(int operand, int rotate_amount){ // rr function
+int_64 rrFunction(int_64 operand, int_64 rotate_amount){ // rr function
     return (operand >> rotate_amount)|(operand << (64 - rotate_amount));
 }
 
@@ -31,7 +31,7 @@ int_64 parseBinaryFunction(const char* operand_symbol){ // binary functions
          return xorFunction(operand1, operand2);
 
     }
-    if(strncmp(operand_symbol,"ls",3) == 0){
+    if(strncmp(operand_symbol,"ls",2) == 0){
          return lsFunction(operand1, operand2);
     }
     if(strncmp(operand_symbol,"rs", 2) == 0){
@@ -150,6 +150,7 @@ int_64 parseBitwiseOrExpression(){
     return result;
 };
 void parseAssignment(){
+    bool justInitialized = find(current_token.symbol) == NULL;
     variable* var = parseVariable(); // TODO: mustnt initialize var if there is error
     matchToken(ASSIGNMENT);
     int_64 response = parseBitwiseOrExpression();
@@ -157,6 +158,7 @@ void parseAssignment(){
         var->value = response;
     }
     else{
+        if(justInitialized) var->name = ""; // delete variable from the array if there is an error
         printf("Error!\n");
     }
 }
