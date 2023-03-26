@@ -8,9 +8,15 @@ int main(){
     initializeHashMap();
     allocateArrayMemory(); // allocate token array mem
     while(fgets(input, 257, stdin) != NULL){
+        has_error = false;
         tokenize(input);
-        printTokens(); // for debug purposes
-        parseStatement();
+       // printTokens(); // for debug purposes
+        if(!has_error){
+            parseStatement();
+        }
+        else{
+            printf("Error!\n");
+        }
         freeArrayMemory(); // free token array mem
     }
     deallocHashMap();

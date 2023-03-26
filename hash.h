@@ -4,8 +4,11 @@
 #include <math.h>
 #ifndef HASH_H
 #define HASH_H
+#ifndef int_64
+#define int_64 long long int
+#endif
 typedef struct s_variable{
-    int value;
+    int_64 value;
     const char* name;
 } variable;
 
