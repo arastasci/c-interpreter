@@ -7,5 +7,5 @@ include_directories(.)
 
 add_executable(cmpe230p1
         main.c
-        token.c
-        token.h parser.h parser.c hash.h hash.c)
+        tokenizer.c
+        tokenizer.h parser.h parser.c hash.h hash.c)
