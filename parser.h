@@ -1,6 +1,6 @@
 #ifndef PARSE_H
 #define PARSE_H
-#include "token.h"
+#include "tokenizer.h"
 #include "hash.h"
 #define int_64 long long int
 void parseStatement();

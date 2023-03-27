@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "parser.h"
-#include "token.h"
+#include "tokenizer.h"
 
 int_64 xorFunction(int_64 operand1, int_64 operand2){ // xor function
     return operand1 ^ operand2;

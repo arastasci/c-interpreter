@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include "token.h"
+#include "tokenizer.h"
 #include "parser.h"
 #include "hash.h"
 int main(){
