@@ -24,7 +24,7 @@ typedef enum e_token_type {
     ERROR     // invalid token
 } token_type;
 
-typedef struct s_token
+typedef struct s_token  // token struct
 {
     int id;
     token_type type;
