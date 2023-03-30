@@ -163,7 +163,7 @@ void parseAssignment(){
     }
 }
 
-void parseStatement(){  // two types of statements: assignment and expression
+void parseStatement(){  // two types of statements: assignment and bitwise or expression
     if(token_array[1].type == ASSIGNMENT){
         parseAssignment(); // assigns the rhs expr to lhs variable
     }
