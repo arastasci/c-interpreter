@@ -7,6 +7,7 @@ int main(){
     char input [257];
     initializeHashMap();
     allocateArrayMemory(); // allocate token array mem
+    printf("> ");
     while(fgets(input, 257, stdin) != NULL){
         has_error = false;
         tokenize(input);
@@ -18,6 +19,7 @@ int main(){
             printf("Error!\n");
         }
         freeArrayMemory(); // free token array mem
+        printf("> ");
     }
     deallocHashMap();
     return 0;

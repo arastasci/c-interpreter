@@ -81,11 +81,6 @@ int getToken(char* input, token* t, bool* exit_early){
         t->symbol = "*";
         i++;
     }
-    else if (input[i] == '/') {
-        t->type = OPERATOR_MULTIPLICATIVE;
-        t->symbol = "/";
-        i++;
-    }
     else if (input[i] == '&') {
         t->type = OPERATOR_BITWISE;
         t->symbol = "&";
