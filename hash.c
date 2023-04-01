@@ -1,19 +1,14 @@
 #include "hash.h"
 
 variable* variables;
-void initializeHashMap(){
+void initializeHashMap(){   // initialize the hashmap and assign all the names to "" and values to 0
     variables = malloc(128 * (sizeof(variable)));
     for(int i = 0; i < 128; i++){
         variables[i].name = "";
         variables[i].value = 0;
     }
 }
-int hash(const char* identifier){
-    // int hashValue = 0;
-    // for(int i = 0; i < strlen(identifier); i++){
-    //     hashValue += identifier[i] * (int)pow(31, i);
-    // }
-    // return hashValue;
+int hash(const char* identifier){ // djb2
     unsigned long hash = 5381;
     int c;
 
@@ -24,9 +19,9 @@ int hash(const char* identifier){
 
 }
 
-variable* insert(const char* identifier){
+variable* insert(const char* identifier){   // insert a variable into the hashmap
     int firstHashVal = hash(identifier);
-    for(int i = 0; i < 128; i++){
+    for(int i = 0; i < 128; i++){   // linear probing
         if(strcmp(variables[(firstHashVal + i) % 128].name, "" ) == 0){
             variable* var = &variables[(firstHashVal + i) % 128];
             var->name = identifier;
@@ -37,12 +32,12 @@ variable* insert(const char* identifier){
 }
 variable* find(const char* identifier){
     int hashVal = hash(identifier);
-    for(int i = 0; i < 128; i++){
+    for(int i = 0; i < 128; i++){   // find with linear probing
         if(strcmp(variables[(hashVal + i) % 128].name, identifier) == 0) return &variables[(hashVal + i) % 128];
     }
     return NULL;
 }
 
-void deallocHashMap(){
+void deallocHashMap(){  // free the hashmap
     free(variables);
 }

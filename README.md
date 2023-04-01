@@ -18,9 +18,9 @@ number       ::= digit { digit }
 
 ```
 
-DOCUMENTATION
+## DOCUMENTATION
 
-Tokenizing 
+### Tokenizing 
 
 We started the project by creating a BNF grammar for the language. As we were creating 
 the BNF we decided to implement this project as a recursively descending interpreter. 
@@ -32,7 +32,7 @@ implemented the functions in 'token.c' and set the constraints to correctly toke
 integers, and operators. We also defined an error function which helped us find errors efficiently 
 and without repetition. 
 
-Parsing/Interpreting
+### Parsing/Interpreting
 
 We then created a parser structure considering the BNF hierarchy. We defined functions that call 
 each other recursively to parse the tokens. Our hierarchy is as follows:
@@ -47,10 +47,23 @@ parseVariable: parses an identifier, checks if the variable is in the hashmap an
 parseUnaryFunction: parses a (bitwise or expression) in parentheses and takes its complement
 parseBinaryFunction: parses two (bitwise or expression)s in parentheses with a separator and applies a binary function () to it
 
-Hashing
+### Hashing
 
-Error Handling
+Since this project is an interpreter, we needed to store the variables and their values.
+We decided to use a hashmap to store the variables and their values.
+We created a hashmap structure that contained the key and the value. We defined a function to initialize and allocate 
+memory for the hashmap. We also defined a function to free the memory of the hashmap. 
+Our hash function is a simple hash function that implements the djb2 algorithm. We defined the insert
+function to get the hash value find out if it is empty or not. If it is empty, we insert the key and the value. 
+Else we do linear probing and get a proper index to insert the key and the value. We defined a find function to 
+get the value of the mentioned variable. If the variable is not in the hashmap, it returns 0.
+We created a function that takes a key and a value and inserts it into the hashmap. We also created a function that takes a key and returns the value of the key. If the key is not in the hashmap, it returns 0.
 
+### Error Handling
 
+We defined the matchToken function to check if the current token is the expected token. If it is not, it returns an error.
+This works because the expected token is the only choice for the grammar to according to the BNF and the recursive hierarchy.
+We also defined a raiseTokenError function to raise error if the token is not one of the expected types in parseFactor.
+This way also ensured our hierarchy worked properly.
 
 ===============================================================================================================

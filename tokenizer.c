@@ -6,17 +6,17 @@ token current_token;
 
 token* token_array;
 int token_count;
-const char* binary_operator_funcs[] = {"xor", "ls", "rs", "lr", "rr", };
-const char* unary_operator = "not";
+const char* binary_operator_funcs[] = {"xor", "ls", "rs", "lr", "rr", };    // binary operators
+const char* unary_operator = "not"; // unary operator
 
 
 int token_index = 0;
-token getNextToken(){
+token getNextToken(){   // to iterate between the tokens
     return token_array[++token_index];
 }
 
 void matchToken(token_type tokenType){
-    // if the token_type matches with the expected type, continue, else raise err
+    // if the token_type matches with the expected type, continue, else raise error
     if(token_index <=token_count && current_token.type == tokenType){
         current_token = getNextToken();
     }
@@ -50,7 +50,7 @@ int getToken(char* input, token* t, bool* exit_early){
 
     while (isspace(input[i])) i++; // skip whitespaces
 
-    if (input[i] == '\0' || input[i] == '\n') {
+    if (input[i] == '\0' || input[i] == '\n') { // if the input is empty, return
         t->type = ERROR;
         *exit_early = true;
         return 0;
@@ -79,6 +79,11 @@ int getToken(char* input, token* t, bool* exit_early){
     else if (input[i] == '*') {
         t->type = OPERATOR_MULTIPLICATIVE;
         t->symbol = "*";
+        i++;
+    }
+    else if (input[i] == '/') {
+        t->type = OPERATOR_MULTIPLICATIVE;
+        t->symbol = "/";
         i++;
     }
     else if (input[i] == '&') {
@@ -112,17 +117,17 @@ int getToken(char* input, token* t, bool* exit_early){
         t->symbol = "=";
         i++;
     }
-    else if (isdigit(input[i])) {
+    else if (isdigit(input[i])) {   // if the input is a digit, determine if it is an integer iterating and get the value
         t->type = INTEGER;
         while (isdigit(input[i])) {
             symbol[j] = input[i];
             i++;
             j++;
         }
-        symbol[j] = '\0';
+        symbol[j] = '\0';   // null terminate the string
         t->symbol = symbol;
     }
-    else if (isalpha(input[i])) {
+    else if (isalpha(input[i])) {   // if the input is a letter, determine if it is an identifier or a keyword
         while (isalpha(input[i])) {
             symbol[j] = input[i];
             i++;
@@ -151,23 +156,22 @@ void tokenize(char* input){
     while (input[i] != '\0' && input[i] != '\n') {
         token t;
 
-        int j = getToken(&input[i], &t, &exit_early);
-        if(exit_early) break;
-        if(has_error) return;
+        int j = getToken(&input[i], &t, &exit_early);   // get the token
+        if(exit_early) break;   // if the input is empty, break
+        if(has_error) return;   // if there is an error, return
         cur_token_count++;
         i+= j;
     }
     token_count = cur_token_count;
     current_token = token_array[0];
 }
-void allocateArrayMemory(){
+void allocateArrayMemory(){ // allocate memory for the token array
     token_array = malloc(128 * sizeof(token));
 }
-void freeArrayMemory(){
-//    free(token_array);
+void freeArrayMemory(){ // free the memory of the token array
     memset(token_array, 0, 128 * sizeof(token));
 }
-void printTokens(){
+void printTokens(){ // created for debugging
 
     for(int i = 0; i < token_count; i++){
         printf("type: %d, symbol: %s\n",
