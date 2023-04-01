@@ -4,11 +4,11 @@
 #include "parser.h"
 #include "hash.h"
 int main(){
-    char input [257];
+    char input [258];
     initializeHashMap();
     allocateArrayMemory(); // allocate token array mem
     printf("> ");
-    while(fgets(input, 257, stdin) != NULL){
+    while(fgets(input, 258, stdin) != NULL){
         has_error = false;
         tokenize(input);
        // printTokens(); // for debug purposes
