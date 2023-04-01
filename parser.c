@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "parser.h"
-#include "token.h"
+#include "tokenizer.h"
 
 int_64 xorFunction(int_64 operand1, int_64 operand2){ // xor function
     return operand1 ^ operand2;
@@ -83,7 +83,7 @@ int_64 parseFactor(){
         matchToken(RIGHT_PAREN);
         return res;
     }
-    // raise error from token.c
+    // raise error from tokenizer.c
     raiseTokenError();
     return 1; // as terms have multiplicative tokens, this value evades division by zero errors5
 }
