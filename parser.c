@@ -93,9 +93,7 @@ int_64 parseTerm(){
     while(current_token.type == OPERATOR_MULTIPLICATIVE){
         token t = current_token;
         matchToken(OPERATOR_MULTIPLICATIVE);
-        if(strncmp(t.symbol,"*", 1) == 0){
-            result *= parseFactor();    // get second factor to be multiply with the first factor
-        }
+        result *= parseFactor();    // get second factor to be multiply with the first factor
     }
     return result;
 }
