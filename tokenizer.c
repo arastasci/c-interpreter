@@ -28,11 +28,11 @@ void matchToken(token_type tokenType){
 
 token_type determineTokenTypeOfAlpha(const char* symbol){
     for(int i = 0; i < 5; i++){
-        if(strncmp(symbol,binary_operator_funcs[i], strlen(binary_operator_funcs[i])) == 0) {
+        if(strcmp(symbol,binary_operator_funcs[i]) == 0) {
             return STR_OPERATOR_BINARY;
         }
     }
-    if(strncmp(symbol, unary_operator, strlen(unary_operator)) == 0){
+    if(strcmp(symbol, unary_operator) == 0){
         return STR_OPERATOR_UNARY;
     }
     return IDENTIFIER;
@@ -79,11 +79,6 @@ int getToken(char* input, token* t, bool* exit_early){
     else if (input[i] == '*') {
         t->type = OPERATOR_MULTIPLICATIVE;
         t->symbol = "*";
-        i++;
-    }
-    else if (input[i] == '/') {
-        t->type = OPERATOR_MULTIPLICATIVE;
-        t->symbol = "/";
         i++;
     }
     else if (input[i] == '&') {

@@ -1,9 +1,0 @@
-{
-	"files.associations": {
-		"*.cpp": "cpp",
-		"token.h": "c",
-		"stdio.h": "c",
-		"__locale": "c",
-		"cstring": "c"
-	}
-}

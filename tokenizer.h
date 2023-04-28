@@ -10,7 +10,7 @@
 #define MAX_TOKEN_COUNT 128
 typedef enum e_token_type {
     OPERATOR_ADDITIVE,   // +, -
-    OPERATOR_MULTIPLICATIVE,  // *, /
+    OPERATOR_MULTIPLICATIVE,  // *
     OPERATOR_BITWISE, // &, |
     LEFT_PAREN, // (
     RIGHT_PAREN, // )

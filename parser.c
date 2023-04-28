@@ -75,7 +75,7 @@ int_64 parseFactor(){
     }
     else if(t.type == STR_OPERATOR_UNARY){
         matchToken(STR_OPERATOR_UNARY);
-        return parseUnaryFunction(); // it's only not(<var>) though :D // lovely views also :D anani sikeyim aras
+        return parseUnaryFunction(); // it's only not(<var>) though :D 
     }
     else if (t.type == LEFT_PAREN){
         matchToken(LEFT_PAREN);
@@ -85,7 +85,7 @@ int_64 parseFactor(){
     }
     // raise error from tokenizer.c
     raiseTokenError();
-    return 1; // as terms have multiplicative tokens, this value evades division by zero errors5
+    return 1; 
 }
 int_64 parseTerm(){
     int_64 result = parseFactor();  // first factor to be multiplied
@@ -93,7 +93,7 @@ int_64 parseTerm(){
     while(current_token.type == OPERATOR_MULTIPLICATIVE){
         token t = current_token;
         matchToken(OPERATOR_MULTIPLICATIVE);
-        result *= parseFactor();    // get second factor to be multiply with the first factor
+        result *= parseFactor();    // get second factor to be multiplied with the first factor
     }
     return result;
 }

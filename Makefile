@@ -1,5 +1,5 @@
-advCalc: main.o hash.o tokenizer.o parser.o
-	gcc main.o hash.o tokenizer.o parser.o -o advCalc
+advcalc: main.o hash.o tokenizer.o parser.o
+	gcc main.o hash.o tokenizer.o parser.o -o advcalc
 
 main.o: main.c
 	gcc -c main.c
@@ -14,4 +14,4 @@ parser.o: parser.c parser.h
 	gcc -c parser.c
 
 clean:
-	rm *.o advCalc
+	rm *.o advcalc
