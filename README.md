@@ -1,31 +1,3 @@
-<br> </br>
-<br> </br>
-
-<br> </br>
-
-## <p style="text-align: center;"> Systems Programming CMPE230</p>
-
-<br> </br>
-
-## <p style="text-align: center;"> AdvCalc</p>
-
-## <p style="text-align: center;"> Project Documentation</p>
-
-<br> </br>
-<br> </br>
-
-### <p style="text-align: center;"> Aras Taşçı 2020400162</p>
-
-### <p style="text-align: center;">Osman Yasin Baştuğ 2021400021</p>
-
-<br> </br>
-<br> </br>
-<br> </br>
-
-### <p style="text-align: center;">Submitted to: Can Özturan</p>
-
-<br> </br>
-
 ## 1 Introduction
 
 This project aims to make an interpreter for an advanced calculator that can perform various operations. The program is capable of parsing complex mathematical expressions and assigning to and keeping track of arbitrarily named variables. The program follows the basic outline of an interpreter, the given input is put into lexical analysis, which outputs an array of tokens, which is then recursively parsed and evaluated.
@@ -160,13 +132,6 @@ then we decided to implement a variable struct and create the hashmap as a varia
 but finally decided on djb2. The biggest problem was handling the errors. We had issues like printing multiple error messages or
 not printing the error messages at all. We finally figured out where we had to put the token checks for error after carefully
 analyzing the hierarchy, and we defined an error flag to prevent multiple error messages. After all we've been through, we are better coders if not better friends.
-<br> </br>
-<br> </br>
-<br> </br>
-<br> </br>
-<br> </br>
-<br> </br>
-<br> </br>
 
 ## 7 Appendix
 
